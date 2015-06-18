@@ -1,6 +1,7 @@
 var express = require("express"),
     app = express(),
     server = require('http').createServer(app),
+    io = require('socket.io')(server),
     morgan = require('morgan'),
     router = express.Router(),
     port = process.env.PORT || 3000,
@@ -9,6 +10,7 @@ var express = require("express"),
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
+app.use(express.static(__dirname + '/public'));
 
 app.set('views', './views');
 app.set('view engine', 'ejs');
@@ -28,17 +30,17 @@ instagram.subscriptions.subscribe({
 });
 
 router.get('/', function(req, res){
-  res.render('index', {header: 'index'});
+  res.render('index', {header: 'Inshtasham'});
 });
 
-app.get('/callback', function(req, res){
+router.get('/callback', function(req, res){
   instagram.subscriptions.handshake(req, res);
   // console.log(req);
 })
 
-app.post('/callback', function(req, res){
+router.post('/callback', function(req, res){
   var data = req.body;
-  console.log(data);
+  io.sockets.emit('instagram', data);
 });
 
 app.use('/', router);
