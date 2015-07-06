@@ -21,8 +21,8 @@ instagram.set('client_secret', process.env.EXPRESS_PRACTICE_INSHTASHAM_CLIENT_SE
 // console.log(instagram);
 
 // run `ngrok http 3000` and change url below accordingly
-instagram.set('callback_url', 'https://5bb041cb.ngrok.io/callback');
-instagram.set('maxSockets', 10);
+instagram.set('callback_url', 'http://dcaee46c.ngrok.io/callback');
+instagram.set('maxSockets', 100);
 
 instagram.subscriptions.subscribe({
   object: 'tag',
@@ -35,7 +35,7 @@ router.get('/', function(req, res){
 
 router.get('/callback', function(req, res){
   instagram.subscriptions.handshake(req, res);
-  // console.log(req);
+  console.log(req);
 })
 
 router.post('/callback', function(req, res){
